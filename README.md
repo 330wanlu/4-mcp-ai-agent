@@ -105,6 +105,17 @@ uv run uvicorn ka_orchestrator.main:app --reload --port 8001
 ## 当前进度
 
 - [x] 阶段 0：uv 骨架、语料、黄金集、扩展点、本机依赖全绿
-- [ ] 阶段 1：PGVector 入库 + Knowledge MCP
+- [x] 阶段 1：PGVector 入库 + Knowledge MCP（三工具可检索）
 - [ ] 阶段 2：豆包 + Agent 问答闭环
 - [ ] 阶段 3+：见方案文档
+
+阶段 1 回溯：[`docs/阶段1-知识入库与Knowledge-MCP.md`](docs/阶段1-知识入库与Knowledge-MCP.md)。
+
+### 阶段 1 常用命令
+
+```powershell
+uv run alembic upgrade head
+uv run python scripts/ingest_docs.py
+uv run python scripts/smoke_knowledge_mcp.py --query 差旅报销
+uv run pytest tests/test_phase0_skeleton.py tests/test_knowledge_search.py -q
+```

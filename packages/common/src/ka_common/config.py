@@ -23,6 +23,7 @@ class Settings(BaseSettings):
     ark_base_url: str = "https://ark.cn-beijing.volces.com/api/v3"
     llm_model: str = "doubao-seed-1-8-251228"
     embedding_model: str = "doubao-embedding-vision-251215"
+    embedding_dimensions: int = 1024  # multimodal 支持 dimensions 参数
 
     # 服务发现（本地）
     knowledge_mcp_url: str = "http://localhost:8101"
