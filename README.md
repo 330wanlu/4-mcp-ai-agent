@@ -108,7 +108,8 @@ uv run uvicorn ka_orchestrator.main:app --reload --port 8001
 - [x] 阶段 1：PGVector 入库 + Knowledge MCP（三工具可检索）
 - [x] 阶段 2：豆包 + Agent 问答闭环（Router/Researcher/Analyst）
 - [x] 阶段 3：FastAPI Chat/审计 API（弱鉴权 + 扩展点）
-- [ ] 阶段 4+：见方案文档
+- [x] 阶段 4：Business MCP + Executor + 审批闸门
+- [ ] 阶段 5+：见方案文档
 
 阶段回溯：
 
@@ -116,6 +117,7 @@ uv run uvicorn ka_orchestrator.main:app --reload --port 8001
 - [`docs/阶段1-知识入库与Knowledge-MCP.md`](docs/阶段1-知识入库与Knowledge-MCP.md)
 - [`docs/阶段2-豆包Agent问答闭环.md`](docs/阶段2-豆包Agent问答闭环.md)
 - [`docs/阶段3-FastAPI-Chat与审计API.md`](docs/阶段3-FastAPI-Chat与审计API.md)
+- [`docs/阶段4-Business与审批闸门.md`](docs/阶段4-Business与审批闸门.md)
 
 ### 阶段 1 常用命令
 
@@ -142,4 +144,12 @@ uv run uvicorn ka_api.main:app --reload --port 8000
 
 uv run pytest tests/test_api_chat.py -q
 uv run pytest tests/test_phase0_skeleton.py tests/test_knowledge_search.py tests/test_agent_qa_flow.py tests/test_api_chat.py -q
+```
+
+### 阶段 4 常用命令
+
+```powershell
+uv run python scripts/demo_cli.py --action
+uv run pytest tests/test_action_gate.py -q
+uv run pytest tests/test_phase0_skeleton.py tests/test_knowledge_search.py tests/test_agent_qa_flow.py tests/test_api_chat.py tests/test_action_gate.py -q
 ```

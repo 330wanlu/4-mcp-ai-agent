@@ -1,10 +1,12 @@
 [project]
 name = "ka-business-mcp"
-version = "0.1.0"
+version = "0.4.0"
 description = "Business MCP Server"
 requires-python = ">=3.11"
 dependencies = [
     "ka-common",
+    "fastapi>=0.115.0",
+    "uvicorn[standard]>=0.34.0",
 ]
 
 [tool.uv.sources]

@@ -6,12 +6,14 @@ requires-python = ">=3.11"
 dependencies = [
     "ka-common",
     "ka-knowledge-mcp",
+    "ka-business-mcp",
     "httpx>=0.28.0",
 ]
 
 [tool.uv.sources]
 ka-common = { workspace = true }
 ka-knowledge-mcp = { workspace = true }
+ka-business-mcp = { workspace = true }
 
 [build-system]
 requires = ["hatchling"]

@@ -1,6 +1,6 @@
-# Agent Graph 草图（阶段 0 冻结；阶段 2 已接线 Router/Researcher/Analyst）
+# Agent Graph（阶段 4：Executor + Guard + 确认闸门已接线）
 
-> 阶段 2：问答闭环已跑通；Executor / 审批闸门在阶段 4。
+> 阶段 4：行动须确认后才写 Business tickets；Executor / Guard 已跑通。
 
 ## Mermaid
 
@@ -26,20 +26,19 @@ flowchart TD
 
 | Agent | 阶段可用 |
 |-------|----------|
-| Router | ✅ 阶段 2 |
-| Researcher | ✅ 阶段 2 |
-| Analyst | ✅ 阶段 2 |
-| Executor | 阶段 4 |
-| Critic / Guard | 阶段 4–5 |
+| Router | ✅ |
+| Researcher | ✅ |
+| Analyst | ✅ |
+| Executor | ✅ 阶段 4 |
+| Critic / Guard | ✅ 阶段 4（MVP 硬规则；阶段 5 再增强） |
 
 ## 扩展点清单
 
 | 扩展点 | 位置 | MVP |
 |--------|------|-----|
-| LLM Provider | `packages/llm` | `VolcengineDoubaoProvider`（chat/embed 已实现） |
-| DocumentParser | `packages/parsers` | `MarkdownParser` / `TextParser`；PDF/DOCX 后挂 |
-| AuthProvider | `packages/auth` | `NoAuthProvider` / `DevHeaderAuthProvider`；JWT 后挂 |
-| MCP Servers | `mcp_servers/*` | Knowledge 已就绪；Memory/Business 骨架；Comms 二期 |
+| LLM Provider | `packages/llm` | Chat/Embed 已实现 |
+| DocumentParser | `packages/parsers` | Markdown/Text；PDF 后挂 |
+| AuthProvider | `packages/auth` | NoAuth / DevHeader |
+| MCP Servers | `mcp_servers/*` | Knowledge / Business 就绪；Memory 骨架 |
 
-代码侧同源：`apps/orchestrator/src/ka_orchestrator/graph.py`，可通过 `GET /graph` 读取。  
-流水线：`ka_orchestrator.pipeline.run_qa_pipeline` / `scripts/demo_cli.py`。
+代码：`ka_orchestrator.pipeline` / `confirmation` / `scripts/demo_cli.py --action`。

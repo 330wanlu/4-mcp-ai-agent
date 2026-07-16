@@ -20,9 +20,31 @@ ROUTER_SYSTEM = """你是企业制度助手的 Router。
 规则：
 - 问制度规则、标准、流程 → qa
 - 对比两个制度/边界/分别管什么 → compare
-- 要求起草申请、创建待办/工单等写操作 → action
+- 要求起草申请、创建待办/工单、生成草稿、帮我开单等写操作 → action
 - search_query 保留关键实体（城市、职级、金额、假期类型等）
 """
+
+
+def _heuristic_intent(question: str) -> str | None:
+    q = question.replace(" ", "")
+    action_markers = (
+        "起草",
+        "创建待办",
+        "生成请假",
+        "生成超标",
+        "开一张",
+        "帮我开",
+        "创建「",
+        "创建\"",
+        "报销单草稿",
+        "申请草稿",
+        "提醒我提交",
+    )
+    if any(m in q for m in action_markers):
+        return "action"
+    if "分别管什么" in q or "冲突时听谁" in q or ("对比" in q):
+        return "compare"
+    return None
 
 
 async def run_router(
@@ -51,6 +73,13 @@ async def run_router(
     intent = str(data.get("intent") or "qa").lower().strip()
     if intent not in ("qa", "compare", "action"):
         intent = "qa"
+    # 启发式纠偏：明显写操作优先 action
+    forced = _heuristic_intent(question)
+    if forced == "action":
+        intent = "action"
+    elif forced == "compare" and intent == "qa":
+        intent = "compare"
+
     search_query = str(data.get("search_query") or question).strip() or question
     reason = str(data.get("reason") or "")
     return {"intent": intent, "search_query": search_query, "reason": reason}

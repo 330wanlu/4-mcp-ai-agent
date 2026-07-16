@@ -144,5 +144,6 @@ def test_orchestrator_http_shape(_env_loaded: None) -> None:
     client = TestClient(create_app())
     assert client.get("/health").json()["status"] == "ok"
     graph = client.get("/graph").json()
-    assert graph["phase"] == 2
+    assert graph["phase"] == 4
     assert "router" in graph["active_nodes"]
+    assert "executor" in graph["active_nodes"]

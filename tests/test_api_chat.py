@@ -34,7 +34,7 @@ def client(_env_loaded: None) -> TestClient:
 def test_health_and_me(client: TestClient) -> None:
     health = client.get("/health").json()
     assert health["status"] == "ok"
-    assert health["phase"] == "3"
+    assert health["phase"] == "4"
     me = client.get("/me").json()
     assert me["user_id"] == "local-dev"
 
@@ -112,3 +112,6 @@ def test_openapi_docs_available(client: TestClient) -> None:
     assert "/chat/sessions/{session_id}/messages" in paths
     assert "/audit/events" in paths
     assert "/debug/sessions/{session_id}" in paths
+    assert "/chat/sessions/{session_id}/pending-actions" in paths
+    assert "/chat/sessions/{session_id}/confirm" in paths
+    assert "/chat/sessions/{session_id}/reject" in paths

@@ -295,12 +295,13 @@ wheels = [
 
 [[package]]
 name = "ka-api"
-version = "0.3.0"
+version = "0.4.0"
 source = { editable = "apps/api" }
 dependencies = [
     { name = "fastapi" },
     { name = "httpx" },
     { name = "ka-auth" },
+    { name = "ka-business-mcp" },
     { name = "ka-common" },
     { name = "ka-orchestrator" },
     { name = "redis" },
@@ -312,6 +313,7 @@ requires-dist = [
     { name = "fastapi", specifier = ">=0.115.0" },
     { name = "httpx", specifier = ">=0.28.0" },
     { name = "ka-auth", editable = "packages/auth" },
+    { name = "ka-business-mcp", editable = "mcp_servers/business" },
     { name = "ka-common", editable = "packages/common" },
     { name = "ka-orchestrator", editable = "apps/orchestrator" },
     { name = "redis", specifier = ">=5.2.0" },
@@ -331,14 +333,20 @@ requires-dist = [{ name = "ka-common", editable = "packages/common" }]
 
 [[package]]
 name = "ka-business-mcp"
-version = "0.1.0"
+version = "0.4.0"
 source = { editable = "mcp_servers/business" }
 dependencies = [
+    { name = "fastapi" },
     { name = "ka-common" },
+    { name = "uvicorn", extra = ["standard"] },
 ]
 
 [package.metadata]
-requires-dist = [{ name = "ka-common", editable = "packages/common" }]
+requires-dist = [
+    { name = "fastapi", specifier = ">=0.115.0" },
+    { name = "ka-common", editable = "packages/common" },
+    { name = "uvicorn", extras = ["standard"], specifier = ">=0.34.0" },
+]
 
 [[package]]
 name = "ka-common"
@@ -420,6 +428,7 @@ version = "0.1.0"
 source = { editable = "packages/mcp_clients" }
 dependencies = [
     { name = "httpx" },
+    { name = "ka-business-mcp" },
     { name = "ka-common" },
     { name = "ka-knowledge-mcp" },
 ]
@@ -427,6 +436,7 @@ dependencies = [
 [package.metadata]
 requires-dist = [
     { name = "httpx", specifier = ">=0.28.0" },
+    { name = "ka-business-mcp", editable = "mcp_servers/business" },
     { name = "ka-common", editable = "packages/common" },
     { name = "ka-knowledge-mcp", editable = "mcp_servers/knowledge" },
 ]
@@ -449,6 +459,7 @@ source = { editable = "apps/orchestrator" }
 dependencies = [
     { name = "fastapi" },
     { name = "httpx" },
+    { name = "ka-business-mcp" },
     { name = "ka-common" },
     { name = "ka-knowledge-mcp" },
     { name = "ka-llm" },
@@ -461,6 +472,7 @@ dependencies = [
 requires-dist = [
     { name = "fastapi", specifier = ">=0.115.0" },
     { name = "httpx", specifier = ">=0.28.0" },
+    { name = "ka-business-mcp", editable = "mcp_servers/business" },
     { name = "ka-common", editable = "packages/common" },
     { name = "ka-knowledge-mcp", editable = "mcp_servers/knowledge" },
     { name = "ka-llm", editable = "packages/llm" },

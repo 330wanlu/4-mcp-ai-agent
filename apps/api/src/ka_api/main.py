@@ -7,7 +7,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from ka_api.deps import AuthDep, CurrentUser
 from ka_api.errors import register_exception_handlers
-from ka_api.routers import audit, chat, debug
+from ka_api.routers import actions, audit, chat, debug
 from ka_common.config import get_settings
 from ka_common.logging import configure_logging, get_logger
 
@@ -19,9 +19,9 @@ def create_app() -> FastAPI:
 
     application = FastAPI(
         title="Knowledge Action Cluster API",
-        version="0.3.0",
+        version="0.4.0",
         description=(
-            "阶段 3：Chat 会话/消息、审计查询、Debug；"
+            "阶段 4：Chat + 行动确认闸门（pending/confirm/reject）；"
             "鉴权通过 AuthProvider + Depends(get_current_user) 挂载。"
         ),
     )
@@ -36,6 +36,7 @@ def create_app() -> FastAPI:
     register_exception_handlers(application)
 
     application.include_router(chat.router)
+    application.include_router(actions.router)
     application.include_router(audit.router)
     application.include_router(debug.router)
 
@@ -44,7 +45,7 @@ def create_app() -> FastAPI:
         return {
             "status": "ok",
             "service": "api",
-            "phase": "3",
+            "phase": "4",
             "auth_provider": auth.name,
             "orchestrator_mode": settings.orchestrator_mode,
         }

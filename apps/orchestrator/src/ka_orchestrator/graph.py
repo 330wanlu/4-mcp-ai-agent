@@ -1,4 +1,4 @@
-"""Agent Graph 拓扑（阶段 2：Router/Researcher/Analyst 已接线）。"""
+"""Agent Graph 拓扑（阶段 4：Executor + Guard + 确认闸门已接线）。"""
 
 from __future__ import annotations
 
@@ -28,19 +28,25 @@ AGENT_NODES = [
     "critic_guard",
 ]
 
-ACTIVE_NODES_PHASE2 = ["router", "researcher", "analyst"]
+ACTIVE_NODES_PHASE4 = [
+    "router",
+    "researcher",
+    "analyst",
+    "executor",
+    "critic_guard",
+]
 
 EXTENSION_POINTS = {
     "llm": "packages/llm — ChatProvider / EmbeddingProvider → VolcengineDoubaoProvider",
     "parsers": "packages/parsers — DocumentParser → MarkdownParser / TextParser（PDF 后挂）",
     "auth": "packages/auth — AuthProvider → NoAuthProvider / DevHeaderAuthProvider",
-    "mcp": "mcp_servers/* — Knowledge / Memory / Business / Comms（Comms 二期）",
+    "mcp": "mcp_servers/* — Knowledge / Business 已就绪；Memory 骨架；Comms 二期",
 }
 
 AGENT_GRAPH_SUMMARY: dict[str, object] = {
     "nodes": AGENT_NODES,
-    "active_nodes": ACTIVE_NODES_PHASE2,
+    "active_nodes": ACTIVE_NODES_PHASE4,
     "mermaid": AGENT_GRAPH_MERMAID,
     "extension_points": EXTENSION_POINTS,
-    "phase": 2,
+    "phase": 4,
 }

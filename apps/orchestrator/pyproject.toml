@@ -8,6 +8,7 @@ dependencies = [
     "ka-llm",
     "ka-mcp-clients",
     "ka-knowledge-mcp",
+    "ka-business-mcp",
     "fastapi>=0.115.0",
     "uvicorn[standard]>=0.34.0",
     "redis>=5.2.0",
@@ -19,6 +20,7 @@ ka-common = { workspace = true }
 ka-llm = { workspace = true }
 ka-mcp-clients = { workspace = true }
 ka-knowledge-mcp = { workspace = true }
+ka-business-mcp = { workspace = true }
 
 [build-system]
 requires = ["hatchling"]
