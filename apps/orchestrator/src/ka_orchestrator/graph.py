@@ -1,4 +1,4 @@
-"""Agent Graph 草图（阶段 0 冻结拓扑；阶段 2 再接线）。"""
+"""Agent Graph 拓扑（阶段 2：Router/Researcher/Analyst 已接线）。"""
 
 from __future__ import annotations
 
@@ -28,6 +28,8 @@ AGENT_NODES = [
     "critic_guard",
 ]
 
+ACTIVE_NODES_PHASE2 = ["router", "researcher", "analyst"]
+
 EXTENSION_POINTS = {
     "llm": "packages/llm — ChatProvider / EmbeddingProvider → VolcengineDoubaoProvider",
     "parsers": "packages/parsers — DocumentParser → MarkdownParser / TextParser（PDF 后挂）",
@@ -37,7 +39,8 @@ EXTENSION_POINTS = {
 
 AGENT_GRAPH_SUMMARY: dict[str, object] = {
     "nodes": AGENT_NODES,
+    "active_nodes": ACTIVE_NODES_PHASE2,
     "mermaid": AGENT_GRAPH_MERMAID,
     "extension_points": EXTENSION_POINTS,
-    "phase": 0,
+    "phase": 2,
 }

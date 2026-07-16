@@ -415,12 +415,14 @@ source = { editable = "packages/mcp_clients" }
 dependencies = [
     { name = "httpx" },
     { name = "ka-common" },
+    { name = "ka-knowledge-mcp" },
 ]
 
 [package.metadata]
 requires-dist = [
     { name = "httpx", specifier = ">=0.28.0" },
     { name = "ka-common", editable = "packages/common" },
+    { name = "ka-knowledge-mcp", editable = "mcp_servers/knowledge" },
 ]
 
 [[package]]
@@ -436,20 +438,28 @@ requires-dist = [{ name = "ka-common", editable = "packages/common" }]
 
 [[package]]
 name = "ka-orchestrator"
-version = "0.1.0"
+version = "0.2.0"
 source = { editable = "apps/orchestrator" }
 dependencies = [
     { name = "fastapi" },
+    { name = "httpx" },
     { name = "ka-common" },
+    { name = "ka-knowledge-mcp" },
     { name = "ka-llm" },
+    { name = "ka-mcp-clients" },
+    { name = "redis" },
     { name = "uvicorn", extra = ["standard"] },
 ]
 
 [package.metadata]
 requires-dist = [
     { name = "fastapi", specifier = ">=0.115.0" },
+    { name = "httpx", specifier = ">=0.28.0" },
     { name = "ka-common", editable = "packages/common" },
+    { name = "ka-knowledge-mcp", editable = "mcp_servers/knowledge" },
     { name = "ka-llm", editable = "packages/llm" },
+    { name = "ka-mcp-clients", editable = "packages/mcp_clients" },
+    { name = "redis", specifier = ">=5.2.0" },
     { name = "uvicorn", extras = ["standard"], specifier = ">=0.34.0" },
 ]
 

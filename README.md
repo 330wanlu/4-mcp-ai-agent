@@ -106,10 +106,14 @@ uv run uvicorn ka_orchestrator.main:app --reload --port 8001
 
 - [x] 阶段 0：uv 骨架、语料、黄金集、扩展点、本机依赖全绿
 - [x] 阶段 1：PGVector 入库 + Knowledge MCP（三工具可检索）
-- [ ] 阶段 2：豆包 + Agent 问答闭环
+- [x] 阶段 2：豆包 + Agent 问答闭环（Router/Researcher/Analyst）
 - [ ] 阶段 3+：见方案文档
 
-阶段 1 回溯：[`docs/阶段1-知识入库与Knowledge-MCP.md`](docs/阶段1-知识入库与Knowledge-MCP.md)。
+阶段回溯：
+
+- [`docs/阶段0-工程骨架与本机依赖.md`](docs/阶段0-工程骨架与本机依赖.md)
+- [`docs/阶段1-知识入库与Knowledge-MCP.md`](docs/阶段1-知识入库与Knowledge-MCP.md)
+- [`docs/阶段2-豆包Agent问答闭环.md`](docs/阶段2-豆包Agent问答闭环.md)
 
 ### 阶段 1 常用命令
 
@@ -118,4 +122,12 @@ uv run alembic upgrade head
 uv run python scripts/ingest_docs.py
 uv run python scripts/smoke_knowledge_mcp.py --query 差旅报销
 uv run pytest tests/test_phase0_skeleton.py tests/test_knowledge_search.py -q
+```
+
+### 阶段 2 常用命令
+
+```powershell
+uv run python scripts/demo_cli.py --question "试用期员工年假怎么算？"
+uv run python scripts/demo_cli.py --golden --limit 10
+uv run pytest tests/test_phase0_skeleton.py tests/test_knowledge_search.py tests/test_agent_qa_flow.py -q
 ```

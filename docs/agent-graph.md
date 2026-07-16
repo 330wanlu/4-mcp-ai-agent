@@ -1,6 +1,6 @@
-# Agent Graph 草图（阶段 0 冻结）
+# Agent Graph 草图（阶段 0 冻结；阶段 2 已接线 Router/Researcher/Analyst）
 
-> 执行逻辑在阶段 2 接线；本文件仅冻结拓扑与扩展点。
+> 阶段 2：问答闭环已跑通；Executor / 审批闸门在阶段 4。
 
 ## Mermaid
 
@@ -26,9 +26,9 @@ flowchart TD
 
 | Agent | 阶段可用 |
 |-------|----------|
-| Router | 阶段 2 |
-| Researcher | 阶段 2 |
-| Analyst | 阶段 2 |
+| Router | ✅ 阶段 2 |
+| Researcher | ✅ 阶段 2 |
+| Analyst | ✅ 阶段 2 |
 | Executor | 阶段 4 |
 | Critic / Guard | 阶段 4–5 |
 
@@ -36,9 +36,10 @@ flowchart TD
 
 | 扩展点 | 位置 | MVP |
 |--------|------|-----|
-| LLM Provider | `packages/llm` | `VolcengineDoubaoProvider`（chat/embed 阶段 1–2 实现） |
+| LLM Provider | `packages/llm` | `VolcengineDoubaoProvider`（chat/embed 已实现） |
 | DocumentParser | `packages/parsers` | `MarkdownParser` / `TextParser`；PDF/DOCX 后挂 |
 | AuthProvider | `packages/auth` | `NoAuthProvider` / `DevHeaderAuthProvider`；JWT 后挂 |
-| MCP Servers | `mcp_servers/*` | Knowledge/Memory/Business 骨架；Comms 二期 |
+| MCP Servers | `mcp_servers/*` | Knowledge 已就绪；Memory/Business 骨架；Comms 二期 |
 
-代码侧同源：`apps/orchestrator/src/ka_orchestrator/graph.py`，可通过 `GET /graph` 读取。
+代码侧同源：`apps/orchestrator/src/ka_orchestrator/graph.py`，可通过 `GET /graph` 读取。  
+流水线：`ka_orchestrator.pipeline.run_qa_pipeline` / `scripts/demo_cli.py`。

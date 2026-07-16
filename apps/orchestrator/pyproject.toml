@@ -1,18 +1,24 @@
 [project]
 name = "ka-orchestrator"
-version = "0.1.0"
+version = "0.2.0"
 description = "Agent Graph Orchestrator"
 requires-python = ">=3.11"
 dependencies = [
     "ka-common",
     "ka-llm",
+    "ka-mcp-clients",
+    "ka-knowledge-mcp",
     "fastapi>=0.115.0",
     "uvicorn[standard]>=0.34.0",
+    "redis>=5.2.0",
+    "httpx>=0.28.0",
 ]
 
 [tool.uv.sources]
 ka-common = { workspace = true }
 ka-llm = { workspace = true }
+ka-mcp-clients = { workspace = true }
+ka-knowledge-mcp = { workspace = true }
 
 [build-system]
 requires = ["hatchling"]
