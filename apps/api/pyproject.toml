@@ -1,18 +1,22 @@
 [project]
 name = "ka-api"
-version = "0.1.0"
+version = "0.3.0"
 description = "FastAPI business API"
 requires-python = ">=3.11"
 dependencies = [
     "ka-common",
     "ka-auth",
+    "ka-orchestrator",
     "fastapi>=0.115.0",
     "uvicorn[standard]>=0.34.0",
+    "httpx>=0.28.0",
+    "redis>=5.2.0",
 ]
 
 [tool.uv.sources]
 ka-common = { workspace = true }
 ka-auth = { workspace = true }
+ka-orchestrator = { workspace = true }
 
 [build-system]
 requires = ["hatchling"]

@@ -31,12 +31,17 @@ class Settings(BaseSettings):
     business_mcp_url: str = "http://localhost:8103"
     orchestrator_url: str = "http://localhost:8001"
     api_url: str = "http://localhost:8000"
+    # api 调 orchestrator：http（推荐多进程）| local（同进程，便于 pytest）
+    orchestrator_mode: str = "local"
 
     # 鉴权（MVP 可关；预留）
     auth_provider: str = "none"  # none | dev_header
 
     # 解析（MVP 仅 md/text）
     parser_enabled: str = "markdown,text"
+
+    # 开发调试接口开关
+    debug_endpoints: bool = True
 
 
 @lru_cache
