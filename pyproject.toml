@@ -1,0 +1,67 @@
+[project]
+name = "mcp-knowledge-action-cluster"
+version = "0.1.0"
+description = "Knowledge Action Cluster：企业制度问答 + 可确认行动的多 Agent / MCP 集群"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "ka-common",
+    "ka-llm",
+    "ka-parsers",
+    "ka-auth",
+    "ka-mcp-clients",
+    "ka-api",
+    "ka-orchestrator",
+    "ka-knowledge-mcp",
+    "ka-memory-mcp",
+    "ka-business-mcp",
+    "httpx>=0.28.0",
+    "pydantic-settings>=2.7.0",
+    "psycopg[binary]>=3.2.0",
+    "redis>=5.2.0",
+    "structlog>=24.4.0",
+    "python-dotenv>=1.0.0",
+    "pytest>=8.3.0",
+    "pytest-asyncio>=0.25.0",
+]
+
+[tool.uv]
+package = false
+link-mode = "copy"
+
+[[tool.uv.index]]
+url = "https://pypi.tuna.tsinghua.edu.cn/simple"
+default = true
+
+[tool.uv.workspace]
+members = [
+    "packages/common",
+    "packages/llm",
+    "packages/parsers",
+    "packages/auth",
+    "packages/mcp_clients",
+    "apps/api",
+    "apps/orchestrator",
+    "mcp_servers/knowledge",
+    "mcp_servers/memory",
+    "mcp_servers/business",
+    "mcp_servers/comms",
+]
+
+[tool.uv.sources]
+ka-common = { workspace = true }
+ka-llm = { workspace = true }
+ka-parsers = { workspace = true }
+ka-auth = { workspace = true }
+ka-mcp-clients = { workspace = true }
+ka-api = { workspace = true }
+ka-orchestrator = { workspace = true }
+ka-knowledge-mcp = { workspace = true }
+ka-memory-mcp = { workspace = true }
+ka-business-mcp = { workspace = true }
+ka-comms-mcp = { workspace = true }
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+pythonpath = ["."]

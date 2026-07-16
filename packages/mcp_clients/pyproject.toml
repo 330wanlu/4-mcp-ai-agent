@@ -1,0 +1,16 @@
+[project]
+name = "ka-mcp-clients"
+version = "0.1.0"
+description = "MCP client wrappers"
+requires-python = ">=3.11"
+dependencies = [
+    "ka-common",
+    "httpx>=0.28.0",
+]
+
+[tool.uv.sources]
+ka-common = { workspace = true }
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"

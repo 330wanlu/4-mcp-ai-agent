@@ -1,0 +1,19 @@
+[project]
+name = "ka-orchestrator"
+version = "0.1.0"
+description = "Agent Graph Orchestrator"
+requires-python = ">=3.11"
+dependencies = [
+    "ka-common",
+    "ka-llm",
+    "fastapi>=0.115.0",
+    "uvicorn[standard]>=0.34.0",
+]
+
+[tool.uv.sources]
+ka-common = { workspace = true }
+ka-llm = { workspace = true }
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"

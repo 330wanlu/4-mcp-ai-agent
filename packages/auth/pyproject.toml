@@ -1,0 +1,15 @@
+[project]
+name = "ka-auth"
+version = "0.1.0"
+description = "AuthProvider interface + NoAuth/DevHeader"
+requires-python = ">=3.11"
+dependencies = [
+    "ka-common",
+]
+
+[tool.uv.sources]
+ka-common = { workspace = true }
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"

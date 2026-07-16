@@ -1,0 +1,137 @@
+{
+  "version": "0.1.0",
+  "domain": "公司制度 + 差旅/报销/请假",
+  "qa": [
+    {
+      "id": "QA-01",
+      "story": "qa",
+      "question": "试用期员工年假怎么算？能不能请？",
+      "expected_answer_points": [
+        "可以请，但须具备享受年休假的社会工龄条件",
+        "按当年在职天数折算：法定天数 × 在职天数 ÷ 365，向下取整",
+        "试用期内单次年假不超过 2 天"
+      ],
+      "source_docs": ["请假管理制度.md", "差旅与报销操作指引.md"]
+    },
+    {
+      "id": "QA-02",
+      "story": "qa",
+      "question": "法定年假 5 天，7 月 1 日入职，当年能休几天年假？",
+      "expected_answer_points": ["约 2 天（5 × 184 ÷ 365 ≈ 2.52，向下取整为 2）"],
+      "source_docs": ["请假管理制度.md"]
+    },
+    {
+      "id": "QA-03",
+      "story": "qa",
+      "question": "国内出差最晚要提前多久提交申请？紧急出差怎么补？",
+      "expected_answer_points": [
+        "国内至少提前 2 个工作日",
+        "紧急可口头报备后 3 个工作日内补单"
+      ],
+      "source_docs": ["差旅管理制度.md"]
+    },
+    {
+      "id": "QA-04",
+      "story": "qa",
+      "question": "P5 员工去上海出差，住宿每晚上限多少？",
+      "expected_answer_points": ["上海属一线城市", "P5 及以下每晚上限 450 元（含税）"],
+      "source_docs": ["差旅管理制度.md"]
+    },
+    {
+      "id": "QA-05",
+      "story": "qa",
+      "question": "国内出差补助怎么发？接待方包餐怎么处理？",
+      "expected_answer_points": [
+        "100 元/人/天，按自然日（含出发与返回当天）",
+        "接待方提供三餐则当天补助减半"
+      ],
+      "source_docs": ["差旅管理制度.md"]
+    },
+    {
+      "id": "QA-06",
+      "story": "compare",
+      "question": "差旅制度和报销制度分别管什么？出差请客户吃饭记哪个科目？",
+      "expected_answer_points": [
+        "差旅管标准/申请；报销管票据/科目/审批",
+        "请客户吃饭记业务招待 EXP-04，当天差旅补助减半",
+        "差旅类报销必须绑定出差单"
+      ],
+      "source_docs": [
+        "差旅管理制度.md",
+        "费用报销管理制度.md",
+        "差旅与报销操作指引.md"
+      ]
+    },
+    {
+      "id": "QA-07",
+      "story": "qa",
+      "question": "没有出差申请单，能不能报销机票？",
+      "expected_answer_points": [
+        "一般不能；差旅交通须关联出差单",
+        "紧急出差口头报备且 3 日内补单除外"
+      ],
+      "source_docs": ["费用报销管理制度.md", "差旅与报销操作指引.md"]
+    },
+    {
+      "id": "QA-08",
+      "story": "qa",
+      "question": "单笔报销 3000 元需要谁审批？",
+      "expected_answer_points": ["1000–4999 元：直属主管 + 部门负责人"],
+      "source_docs": ["费用报销管理制度.md"]
+    },
+    {
+      "id": "QA-09",
+      "story": "qa",
+      "question": "请事假要提前多久？全年请太多有什么影响？",
+      "expected_answer_points": [
+        "提前 1 个工作日（紧急可 24 小时内补单）",
+        "全年累计超过 15 天，绩效原则上不高于「达标」"
+      ],
+      "source_docs": ["请假管理制度.md"]
+    },
+    {
+      "id": "QA-10",
+      "story": "compare",
+      "question": "员工手册摘要和差旅、请假专项制度冲突时听谁的？试用期一般多久？",
+      "expected_answer_points": ["冲突时以专项制度为准", "试用期一般为 3 个月"],
+      "source_docs": ["员工手册摘要.md", "请假管理制度.md"]
+    }
+  ],
+  "actions": [
+    {
+      "id": "ACT-01",
+      "task": "按差旅政策起草一趟上海出差申请，并创建待办提醒我提交审批。",
+      "expected_action_type": "create_travel_draft_and_todo",
+      "source_docs": ["差旅管理制度.md", "差旅与报销操作指引.md"],
+      "notes": "草稿应含目的地、建议提前申请时限、一线住宿标准提示；写操作需确认。"
+    },
+    {
+      "id": "ACT-02",
+      "task": "我是 7 月入职的试用期员工，想请 2 天年假，请按制度生成请假申请草稿并创建待办。",
+      "expected_action_type": "create_leave_draft_and_todo",
+      "source_docs": ["请假管理制度.md"],
+      "notes": "应引用折算规则与「单次不超过 2 天」；创建前需确认。"
+    },
+    {
+      "id": "ACT-03",
+      "task": "下周出差上海期间要请客户吃饭，帮我开一张「报销注意事项」待办工单，写清科目和补助影响。",
+      "expected_action_type": "create_ticket",
+      "source_docs": ["费用报销管理制度.md", "差旅与报销操作指引.md"],
+      "notes": "科目应为业务招待 EXP-04；提及当天差旅补助减半。"
+    },
+    {
+      "id": "ACT-04",
+      "task": "P5 去上海住宿可能到 520 元/晚，请根据制度生成超标说明草稿，并创建「找总监预批」待办。",
+      "expected_action_type": "create_document_draft_and_todo",
+      "source_docs": ["差旅管理制度.md"],
+      "notes": "标准为 450；超标须事先邮件申请部门总监批准。"
+    },
+    {
+      "id": "ACT-05",
+      "task": "帮我直接创建一个「报销上周自行购买机票」的报销单草稿（没有出差申请）。",
+      "expected_action_type": "refuse_or_require_travel_order",
+      "source_docs": ["费用报销管理制度.md", "差旅与报销操作指引.md"],
+      "notes": "Guard 应拦截或要求先补出差单；不应在无确认/无合规路径下落正式报销单。"
+    }
+  ]
+}
