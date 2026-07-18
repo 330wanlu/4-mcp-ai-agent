@@ -1,94 +1,116 @@
 # Knowledge Action Cluster
 
-基于 MCP 的企业多 Agent 智能助手（方案 B）：制度知识问答 + 可确认行动。
+基于 MCP 的企业多 Agent 智能助手（**方案 B**）：制度知识问答 + 可确认行动。
 
-详细阶段计划见 [`docs/方案B-详细实现流程.md`](docs/方案B-详细实现流程.md)。  
-阶段 0 回溯文档见 [`docs/阶段0-工程骨架与本机依赖.md`](docs/阶段0-工程骨架与本机依赖.md)。
+> **无 Docker** · 本机 PostgreSQL+PGVector · Redis/Memurai · `uv` · 火山豆包
+
+| 文档 | 说明 |
+|------|------|
+| [`docs/方案B-详细实现流程.md`](docs/方案B-详细实现流程.md) | 阶段计划与验收 |
+| [`docs/architecture.md`](docs/architecture.md) | 架构速览 |
+| [`docs/demo-script.md`](docs/demo-script.md) | 3–5 分钟演示脚本 |
+| [`docs/agent-graph.md`](docs/agent-graph.md) | Agent 图 |
+| [`docs/eval-report.md`](docs/eval-report.md) | 最新评测摘要 |
+
+---
 
 ## 冻结约束
 
-- **无 Docker**：本机 PostgreSQL + Redis（Memurai）+ `uv run` 多进程
-- **向量库**：PostgreSQL + PGVector（不上 Chroma/Qdrant）
-- **模型**：火山豆包 Chat `doubao-seed-1-8-251228` / Embedding `doubao-embedding-vision-251215`
-- **语料域**：公司制度 + 差旅 / 报销 / 请假
-- **鉴权 / PDF 解析**：MVP 不做，已预留 `AuthProvider` / `DocumentParser`
+- **无 Docker**：本机 PostgreSQL + Redis（Memurai）+ `uv run` 多进程  
+- **向量库**：PostgreSQL + PGVector（不上 Chroma/Qdrant）  
+- **模型**：Chat `doubao-seed-1-8-251228` / Embedding `doubao-embedding-vision-251215`  
+- **语料域**：公司制度 + 差旅 / 报销 / 请假  
+- **鉴权 / PDF**：MVP 预留 `AuthProvider` / `DocumentParser`；Console 可用 `dev_header`
 
-## 本机依赖（无 Docker）— 当前开发机约定
+---
 
-### 1. Python + uv
+## 从零启动（本机）
 
-- Python **3.11+**（当前：3.13）
-- `uv sync`（项目已配置清华 PyPI 镜像）
+### 1. 准备依赖
+
+| 组件 | 要求 |
+|------|------|
+| Python | 3.11+（推荐 3.13）+ [uv](https://github.com/astral-sh/uv) |
+| PostgreSQL | 含 `vector` 扩展；库名建议 `mcp_agent_db` |
+| Redis | 端口 6379（本机可用 Memurai） |
+| Node.js | 18+（仅 Chat Console） |
+| 火山方舟 | `.env` 中 `ARK_API_KEY` |
+
+本机约定示例（可按实际改）：
+
+| 项 | 值 |
+|----|-----|
+| Postgres 服务 | `postgresql-x64-18` |
+| 数据库 | `mcp_agent_db` |
+| Redis | Memurai `E:\AI\Memurai` → `6379` |
+
+### 2. 安装与配置
 
 ```powershell
 cd E:\AI\zwl_ai\4-MCP服务-Agent集群
 uv sync
-```
+copy .env.example .env
+# 编辑 .env：DATABASE_URL / REDIS_URL / ARK_API_KEY
+# Chat Console 建议：AUTH_PROVIDER=dev_header
 
-### 2. PostgreSQL + PGVector
-
-| 项 | 值 |
-|----|-----|
-| 安装目录 | `E:\AI\postgreSQL\install` |
-| 服务 | `postgresql-x64-18` |
-| 数据库 | `mcp_agent_db` |
-| PGVector 归档 | `E:\AI\PGVector_18`（v0.8.3 for PG18） |
-| 连接串 | 见 `.env` 的 `DATABASE_URL` |
-
-```text
-DATABASE_URL=postgresql+psycopg://postgres:<PASSWORD>@localhost:5432/mcp_agent_db
-```
-
-扩展已启用：`CREATE EXTENSION vector` → version **0.8.3**。
-
-### 3. Redis（Memurai）
-
-| 项 | 值 |
-|----|-----|
-| 软件 | Memurai Developer 4.1.2 |
-| 安装目录 | `E:\AI\Memurai` |
-| 服务 | `Memurai` |
-| 端口 | 6379 |
-
-```text
-REDIS_URL=redis://localhost:6379/0
-```
-
-验证：`E:\AI\Memurai\memurai-cli.exe ping` → `PONG`。
-
-### 4. 火山方舟 Key（阶段 1+）
-
-```powershell
-# .env 已从 .env.example 落地；补 ARK_API_KEY
-```
-
-## 阶段 0 自检（已全绿）
-
-```powershell
-uv sync
 uv run python scripts/check_local_deps.py
-# postgres ok / vector ok / redis ok
+# 期望：postgres ok / vector ok / redis ok
 
-uv run pytest tests/test_phase0_skeleton.py -q
-# 5 passed
+uv run alembic upgrade head
+uv run python scripts/ingest_docs.py
 ```
 
-## 目录速览
+### 3. 启动服务
 
-```text
-apps/           # api / orchestrator（chat-console 后期）
-mcp_servers/    # knowledge / memory / business / comms
-packages/       # common / llm / parsers / auth / mcp_clients
-data/corpus/    # 制度语料（Markdown）
-data/golden_set/# 10 问答 + 5 行动任务
-scripts/        # check_local_deps 等
-docs/           # 方案与阶段文档
+**方式 A — 一键（推荐）**
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\start_local.ps1
 ```
 
-## 本地端口（约定）
+会新开两个窗口：API `:8000` + Chat Console `:5173`。
+
+**方式 B — 分步**
+
+```powershell
+# 终端 1：API（默认 ORCHESTRATOR_MODE=local，MCP 进程内调用）
+powershell -File scripts\dev_api.ps1
+
+# 终端 2：前端
+powershell -File scripts\dev_chat_console.ps1
+```
+
+| 入口 | URL |
+|------|-----|
+| Chat Console | http://127.0.0.1:5173 |
+| API / OpenAPI | http://127.0.0.1:8000/docs |
+
+可选独立进程（一般不必）：
+
+```powershell
+powershell -File scripts\dev_orchestrator.ps1   # :8001，需 ORCHESTRATOR_MODE=http
+uv run python -m ka_knowledge_mcp.server      # :8101
+uv run python -m ka_memory_mcp.server         # :8102
+uv run python -m ka_business_mcp.server       # :8103
+```
+
+### 4. 快速 Demo（无 UI）
+
+```powershell
+uv run python scripts/demo_cli.py --question "试用期员工年假怎么算？"
+uv run python scripts/demo_cli.py --action
+uv run python scripts/run_eval.py
+```
+
+完整演示话术见 [`docs/demo-script.md`](docs/demo-script.md)。
+
+---
+
+## 端口约定
 
 | 服务 | 端口 |
 |------|------|
+| chat-console | 5173 |
 | api | 8000 |
 | orchestrator | 8001 |
 | knowledge-mcp | 8101 |
@@ -97,59 +119,61 @@ docs/           # 方案与阶段文档
 | postgres | 5432 |
 | redis / Memurai | 6379 |
 
-```powershell
-uv run uvicorn ka_api.main:app --reload --port 8000
-uv run uvicorn ka_orchestrator.main:app --reload --port 8001
+---
+
+## 目录速览
+
+```text
+apps/
+  api/              # FastAPI Chat / 确认 / 审计
+  orchestrator/     # Agent Graph
+  chat-console/     # Vite React UI
+mcp_servers/        # knowledge / memory / business / comms(占位)
+packages/           # common / llm / parsers / auth / mcp_clients
+data/corpus/        # 制度 Markdown
+data/golden_set/    # 10 问答 + 5 行动
+scripts/            # 启动 / 入库 / demo / 评测 / 冒烟
+docs/               # 方案、阶段回溯、架构、演示
+tests/              # pytest 验收
 ```
 
-## 当前进度
+---
 
-- [x] 阶段 0：uv 骨架、语料、黄金集、扩展点、本机依赖全绿
-- [x] 阶段 1：PGVector 入库 + Knowledge MCP（三工具可检索）
-- [x] 阶段 2：豆包 + Agent 问答闭环（Router/Researcher/Analyst）
-- [x] 阶段 3：FastAPI Chat/审计 API（弱鉴权 + 扩展点）
-- [x] 阶段 4：Business MCP + Executor + 审批闸门
-- [ ] 阶段 5+：见方案文档
-
-阶段回溯：
-
-- [`docs/阶段0-工程骨架与本机依赖.md`](docs/阶段0-工程骨架与本机依赖.md)
-- [`docs/阶段1-知识入库与Knowledge-MCP.md`](docs/阶段1-知识入库与Knowledge-MCP.md)
-- [`docs/阶段2-豆包Agent问答闭环.md`](docs/阶段2-豆包Agent问答闭环.md)
-- [`docs/阶段3-FastAPI-Chat与审计API.md`](docs/阶段3-FastAPI-Chat与审计API.md)
-- [`docs/阶段4-Business与审批闸门.md`](docs/阶段4-Business与审批闸门.md)
-
-### 阶段 1 常用命令
+## 自验证 / 联验
 
 ```powershell
-uv run alembic upgrade head
-uv run python scripts/ingest_docs.py
-uv run python scripts/smoke_knowledge_mcp.py --query 差旅报销
-uv run pytest tests/test_phase0_skeleton.py tests/test_knowledge_search.py -q
+# 阶段 7 冒烟（依赖 + demo 计时 + 全量 pytest，较慢）
+powershell -File scripts\smoke_phase7.ps1
+
+# 或仅 demo（跳过 pytest）
+powershell -File scripts\smoke_phase7.ps1 -SkipPytest
+
+# 全量测试
+uv run pytest -q
 ```
 
-### 阶段 2 常用命令
+前端构建：
 
 ```powershell
-uv run python scripts/demo_cli.py --question "试用期员工年假怎么算？"
-uv run python scripts/demo_cli.py --golden --limit 10
-uv run pytest tests/test_phase0_skeleton.py tests/test_knowledge_search.py tests/test_agent_qa_flow.py -q
+cd apps\chat-console
+npm install
+npm run build
+npm run smoke
 ```
 
-### 阶段 3 常用命令
+---
 
-```powershell
-uv run uvicorn ka_api.main:app --reload --port 8000
-# http://127.0.0.1:8000/docs
+## 进度（阶段 0–7）
 
-uv run pytest tests/test_api_chat.py -q
-uv run pytest tests/test_phase0_skeleton.py tests/test_knowledge_search.py tests/test_agent_qa_flow.py tests/test_api_chat.py -q
-```
+- [x] 0 工程骨架与本机依赖  
+- [x] 1 PGVector + Knowledge MCP  
+- [x] 2 豆包 Agent 问答闭环  
+- [x] 3 FastAPI Chat / 审计  
+- [x] 4 Business + 审批闸门  
+- [x] 5 Memory + Guard + 评测  
+- [x] 6 Chat Console 前端  
+- [x] 7 本地收尾与演示文档  
 
-### 阶段 4 常用命令
+阶段回溯：`docs/阶段0-…` … `docs/阶段7-本地收尾与演示.md`
 
-```powershell
-uv run python scripts/demo_cli.py --action
-uv run pytest tests/test_action_gate.py -q
-uv run pytest tests/test_phase0_skeleton.py tests/test_knowledge_search.py tests/test_agent_qa_flow.py tests/test_api_chat.py tests/test_action_gate.py -q
-```
+二期（阶段 8）：JWT 鉴权、PDF/DOCX、Comms、SSE、OTel 等，见方案文档。

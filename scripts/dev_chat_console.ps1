@@ -1,4 +1,4 @@
-# 启动 Chat Console（需另开终端启动 API :8000）
+﻿# Start Chat Console (start API :8000 in another terminal first).
 $ErrorActionPreference = "Stop"
 Set-Location (Join-Path $PSScriptRoot "..\apps\chat-console")
 if (-not (Test-Path "node_modules")) {

@@ -19,10 +19,23 @@ def _env_loaded() -> None:
     from dotenv import load_dotenv
 
     load_dotenv(ROOT / ".env")
+    prev_mode = os.environ.get("ORCHESTRATOR_MODE")
+    prev_auth = os.environ.get("AUTH_PROVIDER")
     os.environ["ORCHESTRATOR_MODE"] = "local"
     os.environ["AUTH_PROVIDER"] = "dev_header"
     from ka_common.config import get_settings
 
+    get_settings.cache_clear()
+    yield
+    # 避免污染同进程后续用例（如 phase0 默认 none）
+    if prev_mode is None:
+        os.environ.pop("ORCHESTRATOR_MODE", None)
+    else:
+        os.environ["ORCHESTRATOR_MODE"] = prev_mode
+    if prev_auth is None:
+        os.environ.pop("AUTH_PROVIDER", None)
+    else:
+        os.environ["AUTH_PROVIDER"] = prev_auth
     get_settings.cache_clear()
 
 
