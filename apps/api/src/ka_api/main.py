@@ -19,9 +19,9 @@ def create_app() -> FastAPI:
 
     application = FastAPI(
         title="Knowledge Action Cluster API",
-        version="0.4.0",
+        version="0.6.0",
         description=(
-            "阶段 4：Chat + 行动确认闸门（pending/confirm/reject）；"
+            "阶段 6：Chat + 行动确认闸门 + Chat Console 消费接口；"
             "鉴权通过 AuthProvider + Depends(get_current_user) 挂载。"
         ),
     )
@@ -45,7 +45,7 @@ def create_app() -> FastAPI:
         return {
             "status": "ok",
             "service": "api",
-            "phase": "4",
+            "phase": "6",
             "auth_provider": auth.name,
             "orchestrator_mode": settings.orchestrator_mode,
         }

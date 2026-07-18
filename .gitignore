@@ -29,3 +29,8 @@ htmlcov/
 
 # Local data dumps
 *.log
+
+# Frontend
+apps/chat-console/node_modules/
+apps/chat-console/dist/
+apps/chat-console/.vite/

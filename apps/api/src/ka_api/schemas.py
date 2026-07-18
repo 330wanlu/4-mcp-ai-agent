@@ -31,6 +31,10 @@ class PostMessageResponse(BaseModel):
     citations: list[dict[str, Any]] = Field(default_factory=list)
     agent_trace: list[dict[str, Any]] = Field(default_factory=list)
     note: str | None = None
+    # 阶段 6：前端需要状态与待确认行动，避免二次猜测
+    status: str | None = None
+    pending_action: dict[str, Any] | None = None
+    guard: dict[str, Any] | None = None
 
 
 class SessionDetailResponse(BaseModel):
@@ -47,3 +51,5 @@ class SessionDetailResponse(BaseModel):
     title: str | None = None
     note: str | None = None
     messages: list[dict[str, Any]] = Field(default_factory=list)
+    pending_action: dict[str, Any] | None = None
+    guard: dict[str, Any] | None = None

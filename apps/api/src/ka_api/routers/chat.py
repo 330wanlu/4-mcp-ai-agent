@@ -63,6 +63,9 @@ async def post_message(
         citations=list(result.get("citations") or []),
         agent_trace=list(result.get("agent_trace") or []),
         note=result.get("note"),
+        status=result.get("status"),
+        pending_action=result.get("pending_action"),
+        guard=result.get("guard"),
     )
 
 
@@ -94,4 +97,6 @@ async def get_session(
         title=state.get("title"),
         note=state.get("note"),
         messages=list(state.get("messages") or []),
+        pending_action=state.get("pending_action"),
+        guard=state.get("guard"),
     )

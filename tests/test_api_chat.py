@@ -34,7 +34,7 @@ def client(_env_loaded: None) -> TestClient:
 def test_health_and_me(client: TestClient) -> None:
     health = client.get("/health").json()
     assert health["status"] == "ok"
-    assert health["phase"] == "4"
+    assert health["phase"] == "6"
     me = client.get("/me").json()
     assert me["user_id"] == "local-dev"
 
