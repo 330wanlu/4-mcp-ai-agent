@@ -37,11 +37,15 @@ async def run_analyst(
     intent: str,
     hits: list[dict[str, Any]],
     provider: ChatProvider,
+    memory_context: str | None = None,
 ) -> dict[str, Any]:
     materials = _format_materials(hits)
+    mem = (memory_context or "").strip()
+    mem_block = f"\n会话/偏好记忆:\n{mem}\n" if mem else ""
     user = (
         f"意图: {intent}\n"
-        f"用户问题: {question}\n\n"
+        f"用户问题: {question}\n"
+        f"{mem_block}\n"
         f"参考资料:\n{materials}"
     )
     answer = await provider.chat(

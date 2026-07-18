@@ -6,8 +6,10 @@ from ka_common.db.models import (
     AuditLog,
     Chunk,
     Document,
+    SessionSummary,
     Ticket,
     User,
+    UserPreference,
 )
 from ka_common.db.session import ensure_vector_extension, get_engine, session_scope
 
@@ -17,8 +19,10 @@ __all__ = [
     "AuditLog",
     "Chunk",
     "Document",
+    "SessionSummary",
     "Ticket",
     "User",
+    "UserPreference",
     "ensure_vector_extension",
     "get_engine",
     "session_scope",

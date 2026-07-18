@@ -170,11 +170,12 @@ def test_api_pending_confirm_flow(_env_loaded: None) -> None:
     assert count_tickets(session_id=sid) >= 1
 
 
-def test_orchestrator_graph_phase4(_env_loaded: None) -> None:
+def test_orchestrator_graph_phase5(_env_loaded: None) -> None:
     from ka_orchestrator.main import create_app
 
     client = TestClient(create_app())
     graph = client.get("/graph").json()
-    assert graph["phase"] == 4
+    assert graph["phase"] == 5
+    assert "memory" in graph["active_nodes"]
     assert "executor" in graph["active_nodes"]
     assert "critic_guard" in graph["active_nodes"]

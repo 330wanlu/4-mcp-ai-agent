@@ -1,4 +1,4 @@
-"""SQLAlchemy 模型：documents / chunks / audit_logs / tickets / users。"""
+"""SQLAlchemy 模型：documents / chunks / audit_logs / tickets / memory / users。"""
 
 from __future__ import annotations
 
@@ -94,3 +94,25 @@ class Ticket(Base, TimestampMixin):
     status: Mapped[str] = mapped_column(String(32), default="draft")
     payload: Mapped[dict[str, Any]] = mapped_column(JSONB, default=dict)
     created_by: Mapped[Optional[str]] = mapped_column(String(64), nullable=True)
+
+
+class SessionSummary(Base, TimestampMixin):
+    """Memory MCP：会话摘要（PostgreSQL 真相源）。"""
+
+    __tablename__ = "session_summaries"
+
+    session_id: Mapped[str] = mapped_column(String(64), primary_key=True)
+    user_id: Mapped[Optional[str]] = mapped_column(String(64), nullable=True)
+    summary: Mapped[str] = mapped_column(Text, default="")
+    turns: Mapped[list[Any]] = mapped_column(JSONB, default=list)
+    meta: Mapped[dict[str, Any]] = mapped_column(JSONB, default=dict)
+
+
+class UserPreference(Base, TimestampMixin):
+    """Memory MCP：用户偏好（PostgreSQL 真相源）。"""
+
+    __tablename__ = "user_preferences"
+
+    user_id: Mapped[str] = mapped_column(String(64), primary_key=True)
+    preferences: Mapped[dict[str, Any]] = mapped_column(JSONB, default=dict)
+    notes: Mapped[str] = mapped_column(Text, default="")

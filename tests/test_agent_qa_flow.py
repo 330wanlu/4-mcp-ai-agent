@@ -71,11 +71,10 @@ async def test_qa_pipeline_single_question(_env_loaded: None) -> None:
     assert result["session_id"]
     assert result["answer"]
     assert result["citations"], "应有引用"
-    assert [s["agent"] for s in result["agent_trace"]] == [
-        "router",
-        "researcher",
-        "analyst",
-    ]
+    agents = [s["agent"] for s in result["agent_trace"]]
+    for required in ("memory", "router", "researcher", "analyst", "critic_guard"):
+        assert required in agents, f"缺少 agent: {required}, got={agents}"
+    assert result["status"] in ("completed", "degraded")
 
     # Redis
     store2 = SessionStore()
@@ -84,8 +83,8 @@ async def test_qa_pipeline_single_question(_env_loaded: None) -> None:
     finally:
         await store2.close()
     assert state is not None
-    assert state.get("status") == "completed"
-    assert state.get("current_node") == "done"
+    assert state.get("status") in ("completed", "degraded")
+    assert state.get("current_node") in ("done", "degraded")
 
     # audit
     from ka_common.db.models import AuditLog
@@ -144,6 +143,8 @@ def test_orchestrator_http_shape(_env_loaded: None) -> None:
     client = TestClient(create_app())
     assert client.get("/health").json()["status"] == "ok"
     graph = client.get("/graph").json()
-    assert graph["phase"] == 4
+    assert graph["phase"] == 5
     assert "router" in graph["active_nodes"]
+    assert "memory" in graph["active_nodes"]
     assert "executor" in graph["active_nodes"]
+    assert "critic_guard" in graph["active_nodes"]

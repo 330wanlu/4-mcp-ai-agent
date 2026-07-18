@@ -1,0 +1,144 @@
+{
+  "generated_at": "2026-07-18T08:19:43.549707+00:00",
+  "qa": {
+    "total": 10,
+    "citation_hits": 10,
+    "citation_rate": 1.0,
+    "degraded": 0,
+    "degrade_rate": 0.0,
+    "rows": [
+      {
+        "id": "QA-01",
+        "status": "completed",
+        "citation_hit": true,
+        "citation_count": 5,
+        "guard": "pass"
+      },
+      {
+        "id": "QA-02",
+        "status": "completed",
+        "citation_hit": true,
+        "citation_count": 5,
+        "guard": "pass"
+      },
+      {
+        "id": "QA-03",
+        "status": "completed",
+        "citation_hit": true,
+        "citation_count": 5,
+        "guard": "pass"
+      },
+      {
+        "id": "QA-04",
+        "status": "completed",
+        "citation_hit": true,
+        "citation_count": 5,
+        "guard": "pass"
+      },
+      {
+        "id": "QA-05",
+        "status": "completed",
+        "citation_hit": true,
+        "citation_count": 5,
+        "guard": "pass"
+      },
+      {
+        "id": "QA-06",
+        "status": "completed",
+        "citation_hit": true,
+        "citation_count": 5,
+        "guard": "pass"
+      },
+      {
+        "id": "QA-07",
+        "status": "completed",
+        "citation_hit": true,
+        "citation_count": 5,
+        "guard": "pass"
+      },
+      {
+        "id": "QA-08",
+        "status": "completed",
+        "citation_hit": true,
+        "citation_count": 5,
+        "guard": "pass"
+      },
+      {
+        "id": "QA-09",
+        "status": "completed",
+        "citation_hit": true,
+        "citation_count": 5,
+        "guard": "pass"
+      },
+      {
+        "id": "QA-10",
+        "status": "completed",
+        "citation_hit": true,
+        "citation_count": 5,
+        "guard": "pass"
+      }
+    ],
+    "pass": true
+  },
+  "actions": {
+    "total": 5,
+    "type_hits": 5,
+    "type_rate": 1.0,
+    "gate_hits": 5,
+    "gate_rate": 1.0,
+    "rows": [
+      {
+        "id": "ACT-01",
+        "expected": "create_travel_draft_and_todo",
+        "got": "create_travel_draft_and_todo",
+        "type_match": true,
+        "gate_pass": true,
+        "status": "awaiting_confirmation"
+      },
+      {
+        "id": "ACT-02",
+        "expected": "create_leave_draft_and_todo",
+        "got": "create_leave_draft_and_todo",
+        "type_match": true,
+        "gate_pass": true,
+        "status": "awaiting_confirmation"
+      },
+      {
+        "id": "ACT-03",
+        "expected": "create_ticket",
+        "got": "create_ticket",
+        "type_match": true,
+        "gate_pass": true,
+        "status": "awaiting_confirmation"
+      },
+      {
+        "id": "ACT-04",
+        "expected": "create_document_draft_and_todo",
+        "got": "create_document_draft_and_todo",
+        "type_match": true,
+        "gate_pass": true,
+        "status": "awaiting_confirmation"
+      },
+      {
+        "id": "ACT-05",
+        "expected": "refuse_or_require_travel_order",
+        "got": "refuse_or_require_travel_order",
+        "type_match": true,
+        "gate_pass": true,
+        "status": "blocked"
+      }
+    ],
+    "pass": true
+  },
+  "guardrails": {
+    "checks": {
+      "answer_guard_no_citation": true,
+      "action_guard_block": true,
+      "memory_upsert_get": true,
+      "pipeline_out_of_domain_degrade": true
+    },
+    "pass": true,
+    "out_of_domain_status": "degraded"
+  },
+  "pass": true
+}

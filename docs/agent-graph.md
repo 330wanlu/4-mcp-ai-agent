@@ -1,24 +1,31 @@
-# Agent Graph（阶段 4：Executor + Guard + 确认闸门已接线）
+# Agent Graph（阶段 5：Memory + Guard 增强 + 评测）
 
-> 阶段 4：行动须确认后才写 Business tickets；Executor / Guard 已跑通。
+> 阶段 5：Memory MCP、Answer Guard（无引用/域外降级）、行动 Guard、`run_eval.py` 已接线。
 
 ## Mermaid
 
 ```mermaid
 flowchart TD
-  U[User Message] --> R[Router Agent]
+  U[User Message] --> M[Memory MCP]
+  M --> R[Router Agent]
   R -->|qa / compare| Res[Researcher Agent]
   R -->|action| Res
   Res -->|Knowledge MCP| Res
   Res --> A[Analyst Agent]
-  A -->|纯问答结束| Out[Answer + Citations]
+  A -->|纯问答| AG[Answer Guard]
+  AG -->|有引用| Out[Answer + Citations]
+  AG -->|无引用/域外| Deg[Degrade / Refuse]
   A -->|需行动| E[Executor Agent]
   E --> G[Critic / Guard]
   G -->|需确认| Wait[awaiting_confirmation]
   Wait -->|confirm| Biz[Business MCP]
   Wait -->|reject| Cancel[Cancel]
   G -->|冲突拦截| Block[Refuse / Degrade]
-  Out --> Audit[audit_logs]
+  Out --> M2[Memory Upsert]
+  Deg --> M2
+  Wait --> M2
+  Block --> M2
+  M2 --> Audit[audit_logs]
   Biz --> Audit
 ```
 
@@ -26,11 +33,12 @@ flowchart TD
 
 | Agent | 阶段可用 |
 |-------|----------|
+| Memory | ✅ 阶段 5 |
 | Router | ✅ |
 | Researcher | ✅ |
 | Analyst | ✅ |
 | Executor | ✅ 阶段 4 |
-| Critic / Guard | ✅ 阶段 4（MVP 硬规则；阶段 5 再增强） |
+| Critic / Guard | ✅ 阶段 5（问答降级 + 行动冲突） |
 
 ## 扩展点清单
 
@@ -39,6 +47,6 @@ flowchart TD
 | LLM Provider | `packages/llm` | Chat/Embed 已实现 |
 | DocumentParser | `packages/parsers` | Markdown/Text；PDF 后挂 |
 | AuthProvider | `packages/auth` | NoAuth / DevHeader |
-| MCP Servers | `mcp_servers/*` | Knowledge / Business 就绪；Memory 骨架 |
+| MCP Servers | `mcp_servers/*` | Knowledge / Memory / Business 就绪；Comms 骨架 |
 
-代码：`ka_orchestrator.pipeline` / `confirmation` / `scripts/demo_cli.py --action`。
+代码：`ka_orchestrator.pipeline` / `scripts/run_eval.py` / `tests/test_guardrails.py`。

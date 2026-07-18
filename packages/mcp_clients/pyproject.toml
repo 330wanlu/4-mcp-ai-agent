@@ -7,6 +7,7 @@ dependencies = [
     "ka-common",
     "ka-knowledge-mcp",
     "ka-business-mcp",
+    "ka-memory-mcp",
     "httpx>=0.28.0",
 ]
 
@@ -14,6 +15,7 @@ dependencies = [
 ka-common = { workspace = true }
 ka-knowledge-mcp = { workspace = true }
 ka-business-mcp = { workspace = true }
+ka-memory-mcp = { workspace = true }
 
 [build-system]
 requires = ["hatchling"]

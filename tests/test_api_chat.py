@@ -71,14 +71,15 @@ def test_chat_flow_create_ask_get(client: TestClient) -> None:
     assert body["citations"], "应带回引用"
     assert body["agent_trace"]
     agents = [s["agent"] for s in body["agent_trace"]]
-    assert agents == ["router", "researcher", "analyst"]
+    for required in ("memory", "router", "researcher", "analyst", "critic_guard"):
+        assert required in agents, f"缺少 agent: {required}, got={agents}"
 
     detail = client.get(f"/chat/sessions/{session_id}").json()
     assert detail["found"] is True
     assert detail["answer"]
     assert detail["citations"]
     assert detail["agent_trace"]
-    assert detail["status"] == "completed"
+    assert detail["status"] in ("completed", "degraded")
 
     debug = client.get(f"/debug/sessions/{session_id}").json()
     assert debug["found"] is True
